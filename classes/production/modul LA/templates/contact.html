@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+<head>
+    <title>Contact</title>
+
+
+</head>
+<body>
+
+<h5>&nbsp;&nbsp;&nbsp;Welcome! &nbsp; <a th:href="@{/logout}"><b>[Logout]</b></a></h5>
+
+
+<div layout:fragment="content">
+    <div class="jumbotron">
+        <h1>Contact</h1>
+    </div>
+
+    <div class="col-sm-10 text-left">
+        <h3>Developers</h3>
+        <hr/>
+
+        <p><b>Nitu Melania</b> </p>
+        <p><b>Alecu Gabriel</b> </p>
+        <p><b>Maria-Iuliana Dascalu</b></p>
+
+        <br/>
+        <a href="https://github.com/gabe-alex/ComputerAdaptiveTesting/issues">For feedback or any other problems, please use our github issues page.</a>
+
+
+
+    </div>
+</div>
+</body>
+</html>

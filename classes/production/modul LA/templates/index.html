@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+<head>
+    <title>Learning Analytics</title>
+
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        .home_caption {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="jumbotron">
+        <h1>Learning Analytics Module</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="well">
+                <h3> What is Learning Analytics? </h3>
+                <p>Learning analytics is the measurement, collection, analysis and reporting of data
+                    about learners and their contexts, for purposes of understanding and optimizing
+                    learning and the environments in which it occurs.</p>
+
+              //  <a th:href="@{/quiz}" class="btn btn-info" role="button">Take a quiz! (requires account)</a>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <img class="img-responsive" src="images/knowledge.jpg"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>What is Computer Adaptive Testing?(CAT)</h2>
+            <p>A form of computer-based test that adapts to the examinee's ability level</p>
+        </div>
+    </div>
+    <div class="row row-eq-heigh">
+        <div class="col-sm-6">
+            <div class="well">
+                <h3>Benefits of CAT</h3>
+                <img class="home_caption img-responsive" src="images/justTesting.jpg"/>
+                <p>By making the test more intelligent, adaptive testing provides a wide range of benefits,
+                    including:</p>
+                <ul>
+                    <li>Much shorter tests (50%-90% reduction)</li>
+                    <li>More accurate scores (increased precision)</li>
+                    <li>Increased examinee motivation</li>
+                    <li>Greater test security.</li>
+                </ul>
+                <br/>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="well">
+                <h3>How CAT works?</h3>
+                <img class="home_caption img-responsive" src="images/adpt.png"/>
+                <p>CAT successively selects questions for the purpose of maximizing the precision of the exam based on
+                    what is known about the examinee from previous questions.
+                    From the examinee's perspective, the difficulty of the exam seems to tailor itself to their level of
+                    ability.</p>
+                <p>For example, if an examinee performs well on an item of intermediate difficulty, they will then be
+                    presented with a more difficult question.
+                    Or, if they performed poorly, they would be presented with a simpler question.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
