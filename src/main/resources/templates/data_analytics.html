@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+<head>
+    <title>Data Analytics </title>
+
+
+</head>
+<body>
+
+<h5>&nbsp;&nbsp;&nbsp;Welcome! &nbsp; <a th:href="@{/logout}"><b>[Logout]</b></a></h5>
+
+
+<div layout:fragment="content">
+    <div class="jumbotron">
+        <h1>Data Analytics</h1>
+    </div>
+
+    <div class="col-sm-10 text-left">
+        <p>Displays user information from db:username, all obtained marks with date and time, domains tested, no of wrong answered Q. per domain: e.g.: 10 wrong - java, 2 wrong - c++ etc,no. of correct answers per domain</p>
+
+
+    </div>
+    <hr/>
+</div>
+</body>
+</html>

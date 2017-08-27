@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+<head>
+    <title>Descriptive Analytics</title>
+
+
+</head>
+<body>
+
+<h5>&nbsp;&nbsp;&nbsp;Welcome! &nbsp; <a th:href="@{/logout}"><b>[Logout]</b></a></h5>
+
+
+<div layout:fragment="content">
+    <div class="jumbotron">
+        <h1>Descriptive Analytics</h1>
+    </div>
+
+    <div class="col-sm-10 text-left">
+        <p>Descriptive analytics looks at data and analyzes past events for insight as to how to approach the future.
+            Descriptive analytics looks at past performance and understands that performance by mining historical data
+            to look for the reasons behind past success or failure. </p>
+
+    </div>
+<hr/>
+</div>
+</body>
+</html>

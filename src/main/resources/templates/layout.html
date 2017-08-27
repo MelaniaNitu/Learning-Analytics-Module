@@ -75,16 +75,16 @@
             <ul class="nav navbar-nav">
                 <li th:classappend="${#httpServletRequest.getRequestURI() == '/' || #httpServletRequest.getRequestURI() == '/index'}?'active' : ''">
                     <a th:href="@{/}">Home<span class="pull-right glyphicon glyphicon-home"></span></a></li>
-                <li th:classappend="${#httpServletRequest.getRequestURI() == '/quiz'}?'active' : ''"><a
+               <!-- <li th:classappend="${#httpServletRequest.getRequestURI() == '/quiz'}?'active' : ''"><a
                         th:href="@{/quiz}">Quiz<span class="pull-right glyphicon glyphicon-ok"></span></a></li>
-
+-->
                 <li sec:authorize="isAnonymous()"
                     th:classappend="${#httpServletRequest.getRequestURI() == '/login'}?'active' : ''"><a
                         th:href="@{/login}">Log-in<span class="pull-right glyphicon glyphicon-log-in"></span></a></li>
-                <li sec:authorize="isAnonymous()"
+<!--                <li sec:authorize="isAnonymous()"
                     th:classappend="${#httpServletRequest.getRequestURI() == '/register'}?'active' : ''"><a
                         th:href="@{/register}">Register<span class="pull-right glyphicon glyphicon-edit"></span></a>
-                </li>
+                </li>-->
 
                 <li sec:authorize="isAuthenticated()" class="dropdown"
                     th:classappend="${#httpServletRequest.getRequestURI() == '/changePass'}?'active' : ''">
@@ -97,17 +97,37 @@
                         <li><a th:href="@{/logout}">Logout</a></li>
                     </ul>
                 </li>
-                <li sec:authorize="hasAuthority('ADMIN')"
-                    th:classappend="${#httpServletRequest.getRequestURI() == '/managedb'}?'active' : ''"><a
-                        th:href="@{/managedb}">Manage Database<span
-                        class="pull-right glyphicon glyphicon-list-alt"></span></a></li>
+                <li sec:authorize="isAuthenticated()"
+                    th:classappend="${#httpServletRequest.getRequestURI() == '/data_analytics'}?'active' : ''"><a
+                        th:href="@{/data_analytics}">Data Analytics<span class="pull-right glyphicon glyphicon-list-alt"></span></a></li>
 
-                <li><a href="https://docs.google.com/forms/d/1JWsaoGHBHaFwy6WgtyHyo2gmENw-MndYKpB1xRf5Rkg/viewform"
+                <li sec:authorize="isAuthenticated()" class="dropdown"
+                    th:classappend="${#httpServletRequest.getRequestURI() == '/about' || #httpServletRequest.getRequestURI() == '/contact'}?'active' : ''">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Learning Analytics<span class="caret"></span><span
+                            class="pull-right glyphicon glyphicon-education"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/descriptive'}?'active' : ''"><a
+                                th:href="@{/descriptive}">Descriptive Analytics</a></li>
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/diagnostic'}?'active' : ''"><a
+                                th:href="@{/diagnostic}">Diagnostic Analytics</a></li>
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/predictive'}?'active' : ''"><a
+                                th:href="@{/predictive}">Predictive Analytics</a></li>
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/prescriptive'}?'active' : ''"><a
+                                th:href="@{/prescriptive}">Prescriptive Analytics</a></li>
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/summary'}?'active' : ''"><a
+                                th:href="@{/summary}">Profile Summary</a></li>
+
+                    </ul>
+                </li>
+
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdxQbPbKAWt4aw9wgTgZ0Wq_aY0FCPDdVCVdA-tgvjYT6NCMA/viewform?usp=sf_link"
                        target="_blank">Feedback<span class="pull-right glyphicon glyphicon-pencil"></span></a></li>
+<!--
 
                 <li th:classappend="${#httpServletRequest.getRequestURI() == '/tutorials'}?'active' : ''"><a
                         th:href="@{/tutorials}">Tutorials<span class="pull-right glyphicon glyphicon-education"></span></a>
                 </li>
+-->
 
                 <li class="dropdown"
                     th:classappend="${#httpServletRequest.getRequestURI() == '/about' || #httpServletRequest.getRequestURI() == '/contact'}?'active' : ''">
@@ -116,8 +136,8 @@
                     <ul class="dropdown-menu" role="menu">
                         <li th:classappend="${#httpServletRequest.getRequestURI() == '/about'}?'active' : ''"><a
                                 th:href="@{/about}">About</a></li>
-                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/results'}?'active' : ''"><a
-                                th:href="@{/results}">Results</a></li>
+                      <!--  <li th:classappend="${#httpServletRequest.getRequestURI() == '/results'}?'active' : ''"><a
+                                th:href="@{/results}">Results</a></li>-->
                         <li th:classappend="${#httpServletRequest.getRequestURI() == '/contact'}?'active' : ''"><a
                                 th:href="@{/contact}">Contact</a></li>
                         <li><a href="https://github.com/MelaniaNitu/Learning-Analytics-Module" target="_blank">GitHub</a>
