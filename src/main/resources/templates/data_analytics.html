@@ -3,26 +3,38 @@
       xmlns:th="http://www.thymeleaf.org"
       layout:decorator="layout">
 <head>
-    <title>Data Analytics </title>
-
-
+    <title>View Users</title>
 </head>
 <body>
 
-<h5>&nbsp;&nbsp;&nbsp;Welcome! &nbsp; <a th:href="@{/logout}"><b>[Logout]</b></a></h5>
-
-
 <div layout:fragment="content">
     <div class="jumbotron">
-        <h1>Data Analytics</h1>
+        <h1>Users Progress</h1>
     </div>
 
-    <div class="col-sm-10 text-left">
-        <p>Displays user information from db:username, all obtained marks with date and time, domains tested, no of wrong answered Q. per domain: e.g.: 10 wrong - java, 2 wrong - c++ etc,no. of correct answers per domain</p>
+    <ol class="breadcrumb">
+        <li class="active">Users</li>
+    </ol>
 
+    <h2>View users progress</h2>
+    <div class="users_list">
+        <div class="domain" th:each="d : ${domains}">
+            <form class="form-inline" method="post" th:action="@{/managedb/domain/rename}">
+                <input type="hidden" name="id" th:value="${d.id}"/>
+                <input type="text" class="form-control" title="Username" name="name" th:value="${d.name}"/>
 
+                <a class="btn btn-primary" th:href="@{/managedb/domain/{id}(id=${d.id})}">View Progress</a>
+            </form>
+        </div>
     </div>
-    <hr/>
+
+    <form class="form-inline" method="post" th:action="@{/managedb/domain/add}">
+        <div class="form-group">
+            <label for="name">Username</label>
+            <input type="text" class="form-control" id="name" name="name"/>
+        </div>
+        <button type="submit" class="btn btn-default">View Metrics</button>
+    </form>
 </div>
 </body>
 </html>
