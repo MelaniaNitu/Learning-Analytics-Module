@@ -100,24 +100,18 @@
 
 
 
-                <li sec:authorize="isAuthenticated()"
-                    th:classappend="${#httpServletRequest.getRequestURI() == '/data_analytics'}?'active' : ''">
-                    <a th:href="@{/data_analytics}">Data Analytics<span class="pull-right glyphicon glyphicon-list-alt"></span></a></li>
+                <li sec:authorize="hasAuthority('ADMIN')"
+                    th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/users'}?'active' : ''">
+                    <a th:href="@{/analytics/users}">Users<span class="pull-right glyphicon glyphicon-list-alt"></span></a></li>
 
 
-
-
-               <!-- <li sec:authorize="isAuthenticated()"
-                    th:classappend="${#httpServletRequest.getRequestURI() == '/data_analytics'}?'active' : ''"><a
-                        th:href="@{/data_analytics}">Data Analytics<span class="pull-right glyphicon glyphicon-list-alt"></span></a></li>
--->
                 <li sec:authorize="isAuthenticated()" class="dropdown"
                     th:classappend="${#httpServletRequest.getRequestURI() == '/about' || #httpServletRequest.getRequestURI() == '/contact'}?'active' : ''">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Learning Analytics<span class="caret"></span><span
                             class="pull-right glyphicon glyphicon-education"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/descriptive'}?'active' : ''"><a
-                                th:href="@{/descriptive}">Descriptive Analytics</a></li>
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/descriptive'}?'active' : ''"><a
+                                th:href="@{/analytics/descriptive}">Descriptive Analytics</a></li>
                         <li th:classappend="${#httpServletRequest.getRequestURI() == '/diagnostic'}?'active' : ''"><a
                                 th:href="@{/diagnostic}">Diagnostic Analytics</a></li>
                         <li th:classappend="${#httpServletRequest.getRequestURI() == '/predictive'}?'active' : ''"><a
