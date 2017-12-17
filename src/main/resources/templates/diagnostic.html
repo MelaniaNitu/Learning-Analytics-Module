@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
       layout:decorator="layout">
 <head>
     <title>Diagnostic Analytics</title>
@@ -9,8 +8,6 @@
 </head>
 <body>
 
-<h5>&nbsp;&nbsp;&nbsp;Welcome! &nbsp; <a th:href="@{/logout}"><b>[Logout]</b></a></h5>
-
 
 <div layout:fragment="content">
     <div class="jumbotron">
@@ -18,15 +15,7 @@
     </div>
 
     <div class="col-sm-10 text-left">
-        <p>The two major approaches that have been identified for diagnostic analysis are:
-
-   <ol>
-        <li>assessment of deficiency, which focuses on student's weaknesses</li>
-        <li>analysis of errors, which focuses on the types of errors the student makes</li>
-    </ol>
-        </p>
-
-        <p>The purpose of the diagnostic analysis is not only to identify the strengths and the weakneasses,
+           <p>The purpose of the diagnostic analysis is not only to identify the strengths and the weakneasses,
             but also to investigate why the user has these weak points (perhaps a lack of
             information, a lack of practice or it is an isolated event, produced only once, caused
             by the lack of attention). </p>

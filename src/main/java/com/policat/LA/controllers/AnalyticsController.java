@@ -40,6 +40,42 @@ public class AnalyticsController {
         return "descriptive";
     }
 
+    @RequestMapping(value = "diagnostic", method = RequestMethod.GET)
+    public String viewDiagnostic(){
+        AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = auth.getUser();
+        List<QuizResult> quizResults = user.getQuizResults();
+        quizResults.sort(Comparator.comparing(QuizResult::getScore));
+
+        //am sortat rezultatele in functie de scor, tb afisat DOAR cel mai mic scor + toate de sub mediana
+
+        return "diagnostic";
+    }
+
+    @RequestMapping(value = "predictive", method = RequestMethod.GET)
+    public String viewPredictive(){
+        AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = auth.getUser();
+        List<QuizResult> quizResults = user.getQuizResults();
+
+        // 1. compar Nivel User (avg(Nota Initiala,Nota Finala)) cu nota test hartie
+        //2. afisez toate notele sub mediana
+        //3. Grafic cu trendul
+
+        return "predictive";
+    }
+
+    @RequestMapping(value = "prescriptive", method = RequestMethod.GET)
+    public String viewPrescriptive(){
+        AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = auth.getUser();
+        List<QuizResult> quizResults = user.getQuizResults();
+
+       //verific unde a avut cel mai mic scor(domeniu+label) => recomand tutorial in domeniu/label-ul respectiv
+
+        return "prescriptive";
+    }
+
     @RequestMapping(value = "summary", method = RequestMethod.GET)
     public String viewSummary(){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
