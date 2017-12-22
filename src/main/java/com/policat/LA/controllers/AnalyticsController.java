@@ -2,6 +2,7 @@ package com.policat.LA.controllers;
 
 import com.policat.LA.entities.QuizResult;
 import com.policat.LA.entities.User;
+import com.policat.LA.repositories.QuizResultRepository;
 import com.policat.LA.repositories.UserRepository;
 import com.policat.LA.session.AuthedUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import java.util.List;
 public class AnalyticsController {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    QuizResultRepository quizResultRepository;
+
 
     @ModelAttribute("users")
     public List<User> getUsers() {return (List<User>) userRepository.findAll();}
@@ -34,9 +38,9 @@ public class AnalyticsController {
     public String viewDescriptive(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
-        List<QuizResult> quizResults = user.getQuizResults();
-        quizResults.sort(Comparator.comparing(QuizResult::getDate));
-        model.addAttribute(quizResults);
+        List<QuizResult> quizResults = quizResultRepository.findByUser(user);
+        quizResults.sort(Comparator.comparing(QuizResult::getDate).reversed());
+        model.addAttribute("quizResults", quizResults);
         return "descriptive";
     }
 
