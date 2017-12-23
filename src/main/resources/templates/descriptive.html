@@ -15,26 +15,32 @@
         <h1>Descriptive Analytics</h1>
     </div>
 
-    <div class="col-sm-12 text-left">
+    <div class="col-sm-12 text-left" th:style="'border: 2px solid green; border-radius: 5px;'">
         <p>Descriptive analytics looks at data and analyzes past events for insight as to how to approach the future.
             Descriptive analytics looks at past performance and understands that performance by mining historical data
             to look for the reasons behind past success or failure. </p>
 
     </div>
+    <br/><br/>
     <hr/>
 
     <div class="results_list">
+    <div class="row">
+            <div class="col-sm-4" th:style="'background-color:black;color:white;'">Date</div>
+            <div class="col-sm-4" th:style="'background-color:black;color:white;'">Domain</div>
+            <div class="col-sm-4" th:style="'background-color:black;color:white;'">Score</div>
+        </div>
         <div class="row" th:each="q : ${quizResults}">
-            <div class="col-sm-4" th:text="${q.date}">Date</div>
-            <div class="col-sm-4" th:text="${q.domain.name}">Domain</div>
-            <div class="col-sm-4" th:text="${q.score}">Score</div>
+            <div class="col-sm-4" th:style="'background-color:lightgray;'" th:text="${q.date}">Date</div>
+            <div class="col-sm-4" th:style="'background-color:lavender;'" th:text="${q.domain.name}">Domain</div>
+            <div class="col-sm-4" th:style="'background-color:lavenderblush;'" th:text="${q.score}">Score</div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-4">User Level: </div>
-        <div class="col-sm-4" th:text="${userLevel}">5</div>
-        <div class="col-sm-4" th:text="${userLevelComparison}">Average</div>
+        <div class="col-sm-4" th:style="'background-color: #98e698;'">User Level: </div>
+        <div class="col-sm-4" th:style="'background-color: #98e698;'" th:text="${userLevel}">5</div>
+        <div class="col-sm-4" th:style="'background-color: #98e698;'" th:text="${userLevelComparison}">Average</div>
     </div>
 <hr/>
 </div>

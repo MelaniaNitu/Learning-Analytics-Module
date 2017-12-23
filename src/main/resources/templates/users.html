@@ -12,16 +12,13 @@
         <h1>Users Progress</h1>
     </div>
 
-    <ol class="breadcrumb">
-        <li class="active">Users</li>
-    </ol>
 
-    <h2>View users progress</h2>
+    <br/>
     <div class="users_list">
         <div class="row" th:each="u : ${users}">
-            <div class="col-sm-8" th:text="${u.username}">Username</div>
+            <div class="col-sm-8" th:style="'background-color:lightgray;'" th:text="${u.username}">Username</div>
             <div class="col-sm-4">
-                <a class="btn btn-primary" th:href="@{/analytics/summary/{id}(id=${u.id})}">View Metrics</a>
+                <a class="btn btn-success" th:href="@{/analytics/summary/{id}(id=${u.id})}">View Metrics</a>
             </div>
         </div>
     </div>

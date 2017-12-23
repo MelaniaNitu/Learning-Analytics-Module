@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
       layout:decorator="layout">
 <head>
     <title>Predictive Analytics</title>
-
+    <script> </script>
 
 </head>
 <body>
@@ -13,12 +14,56 @@
         <h1>Predictive Analytics</h1>
     </div>
 
-    <div class="col-sm-10 text-left">
+    <div class="col-sm-12 text-left" th:style="'border: 2px solid green; border-radius: 5px;'">
         <p>Predictive analytics turns data into valuable, actionable information. Predictive analytics uses data to
-             determine the probable future outcome of an event or a likelihood of a situation occurring. </p>
-
+           determine the probable future outcome of an event or a likelihood of a situation occurring. </p>
     </div>
+    <br/><br/>
     <hr/>
+
+    <!--Grafic-->
+<!--
+    <th:block layout:fragment="script">
+        <script th:src="@{/canvasjs.min.js}"></script>
+        <script th:src="@{/jquery.canvasjs.min.js}"></script>
+
+        <script>
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2",
+	title:{
+		text: "Simple Line Chart"
+	},
+	axisY:{
+		includeZero: false
+	},
+	data: [{
+		type: "line",
+		dataPoints: [
+			{ y: 450 },
+			{ y: 414},
+			{ y: 520, indexLabel: "highest",markerColor: "red", markerType: "triangle" },
+			{ y: 460 },
+			{ y: 450 },
+			{ y: 500 },
+			{ y: 480 },
+			{ y: 480 },
+			{ y: 410 , indexLabel: "lowest",markerColor: "DarkSlateGrey", markerType: "cross" },
+			{ y: 500 },
+			{ y: 480 },
+			{ y: 510 }
+		]
+	}]
+});
+chart.render();
+
+}
+        </script>
+    </th:block>-->
+
+
 </div>
 </body>
 </html>
