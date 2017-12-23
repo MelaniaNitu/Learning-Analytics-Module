@@ -101,26 +101,32 @@
 
 
                 <li sec:authorize="hasAuthority('ADMIN')"
-                    th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/users'}?'active' : ''">
+                    th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/users'} ? 'active' : ''">
                     <a th:href="@{/analytics/users}">Users<span class="pull-right glyphicon glyphicon-list-alt"></span></a></li>
 
 
                 <li sec:authorize="isAuthenticated()" class="dropdown"
-                    th:classappend="${#httpServletRequest.getRequestURI() == '/about' || #httpServletRequest.getRequestURI() == '/contact'}?'active' : ''">
+                    th:classappend="${
+                        #httpServletRequest.getRequestURI() == '/analytics/descriptive'
+                        || #httpServletRequest.getRequestURI() == '/analytics/diagnostic'
+                        || #httpServletRequest.getRequestURI() == '/analytics/predictive'
+                        || #httpServletRequest.getRequestURI() == '/analytics/prescriptive'
+                        || #httpServletRequest.getRequestURI() == '/analytics/summary'
+                    } ? 'active' : ''">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Learning Analytics<span class="caret"></span><span
                             class="pull-right glyphicon glyphicon-education"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/descriptive'}?'active' : ''"><a
-                                th:href="@{/analytics/descriptive}">Descriptive Analytics</a></li>
-                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/diagnostic'}?'active' : ''"><a
-                                th:href="@{/diagnostic}">Diagnostic Analytics</a></li>
-                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/predictive'}?'active' : ''"><a
-                                th:href="@{/predictive}">Predictive Analytics</a></li>
-                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/prescriptive'}?'active' : ''"><a
-                                th:href="@{/prescriptive}">Prescriptive Analytics</a></li>
-                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/summary'}?'active' : ''"><a
-                                th:href="@{/summary}">Profile Summary</a></li>
 
+                    <ul class="dropdown-menu" role="menu">
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/descriptive'} ? 'active' : ''"><a
+                                th:href="@{/analytics/descriptive}">Descriptive Analytics</a></li>
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/diagnostic'} ? 'active' : ''"><a
+                                th:href="@{/analytics/diagnostic}">Diagnostic Analytics</a></li>
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/predictive'} ? 'active' : ''"><a
+                                th:href="@{/analytics/predictive}">Predictive Analytics</a></li>
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/prescriptive'} ? 'active' : ''"><a
+                                th:href="@{/analytics/prescriptive}">Prescriptive Analytics</a></li>
+                        <li th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/summary'} ? 'active' : ''"><a
+                                th:href="@{/analytics/summary}">Profile Summary</a></li>
                     </ul>
                 </li>
 

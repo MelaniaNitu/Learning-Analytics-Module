@@ -21,6 +21,7 @@
             to look for the reasons behind past success or failure. </p>
 
     </div>
+    <hr/>
 
     <div class="results_list">
         <div class="row" th:each="q : ${quizResults}">
@@ -28,6 +29,12 @@
             <div class="col-sm-4" th:text="${q.domain.name}">Domain</div>
             <div class="col-sm-4" th:text="${q.score}">Score</div>
         </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">User Level: </div>
+        <div class="col-sm-4" th:text="${userLevel}">5</div>
+        <div class="col-sm-4" th:text="${userLevelComparison}">Average</div>
     </div>
 <hr/>
 </div>

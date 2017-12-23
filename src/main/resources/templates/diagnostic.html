@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
       layout:decorator="layout">
 <head>
     <title>Diagnostic Analytics</title>
@@ -22,6 +23,19 @@
 
     </div>
     <hr/>
+
+    <div class="row">
+        <div class="col-sm-4">Lowest score: </div>
+        <div class="col-sm-4" th:text="${minScore}">5</div>
+    </div>
+
+    <div class="results_list">
+        <div class="row" th:each="q : ${underMedian}">
+            <div class="col-sm-4" th:text="${q.date}">Date</div>
+            <div class="col-sm-4" th:text="${q.domain.name}">Domain</div>
+            <div class="col-sm-4" th:text="${q.score}">Score</div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

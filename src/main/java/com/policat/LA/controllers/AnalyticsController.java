@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping("/analytics")
@@ -40,19 +44,43 @@ public class AnalyticsController {
         User user = auth.getUser();
         List<QuizResult> quizResults = quizResultRepository.findByUser(user);
         quizResults.sort(Comparator.comparing(QuizResult::getDate).reversed());
+
+        double average = quizResults.stream().mapToInt(q -> q.getScore()).average().getAsDouble();
+
+        Supplier<Stream<QuizResult>> quizResultsStreamSupplier = () -> StreamSupport.stream(quizResultRepository.findAll().spliterator(), false);
+        int globalMax = quizResultsStreamSupplier.get().mapToInt(q -> q.getScore()).max().getAsInt();
+        int globalMin = quizResultsStreamSupplier.get().mapToInt(q -> q.getScore()).min().getAsInt();
+        double globalMedian = (globalMax + globalMin) / (double) 2;
+
+        String userLevelComparison;
+        if(average > globalMedian) {
+            userLevelComparison = "Above average";
+        } else if (average < globalMedian) {
+            userLevelComparison = "Under average";
+        } else {
+            userLevelComparison = "Average";
+        }
+
         model.addAttribute("quizResults", quizResults);
+        model.addAttribute("userLevel", average);
+        model.addAttribute("userLevelComparison", userLevelComparison);
         return "descriptive";
     }
 
     @RequestMapping(value = "diagnostic", method = RequestMethod.GET)
-    public String viewDiagnostic(){
+    public String viewDiagnostic(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
-        List<QuizResult> quizResults = user.getQuizResults();
-        quizResults.sort(Comparator.comparing(QuizResult::getScore));
+        List<QuizResult> quizResults = quizResultRepository.findByUser(user);
 
-        //am sortat rezultatele in functie de scor, tb afisat DOAR cel mai mic scor + toate de sub mediana
+        int maxScore = quizResults.stream().mapToInt(q -> q.getScore()).max().getAsInt();
+        int minScore = quizResults.stream().mapToInt(q -> q.getScore()).min().getAsInt();
+        double median = (maxScore + minScore) / (double) 2;
 
+        List<QuizResult> underMedian = quizResults.stream().filter(q -> q.getScore() < median).collect(Collectors.toList());
+
+        model.addAttribute("minScore", minScore);
+        model.addAttribute("underMedian", underMedian);
         return "diagnostic";
     }
 
