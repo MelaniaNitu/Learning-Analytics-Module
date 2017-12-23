@@ -47,9 +47,9 @@ public class AnalyticsController {
 
         double average = quizResults.stream().mapToInt(q -> q.getScore()).average().getAsDouble();
 
-        Supplier<Stream<QuizResult>> quizResultsStreamSupplier = () -> StreamSupport.stream(quizResultRepository.findAll().spliterator(), false);
-        int globalMax = quizResultsStreamSupplier.get().mapToInt(q -> q.getScore()).max().getAsInt();
-        int globalMin = quizResultsStreamSupplier.get().mapToInt(q -> q.getScore()).min().getAsInt();
+        Supplier<Stream<QuizResult>> globalQuizResultStream = () -> StreamSupport.stream(quizResultRepository.findAll().spliterator(), false);
+        int globalMax = globalQuizResultStream.get().mapToInt(q -> q.getScore()).max().getAsInt();
+        int globalMin = globalQuizResultStream.get().mapToInt(q -> q.getScore()).min().getAsInt();
         double globalMedian = (globalMax + globalMin) / (double) 2;
 
         String userLevelComparison;
