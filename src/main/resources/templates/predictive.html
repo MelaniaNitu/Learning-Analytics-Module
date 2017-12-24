@@ -21,49 +21,35 @@
     <br/><br/>
     <hr/>
 
-    <!--Grafic-->
-<!--
-    <th:block layout:fragment="script">
-        <script th:src="@{/canvasjs.min.js}"></script>
-        <script th:src="@{/jquery.canvasjs.min.js}"></script>
-
-        <script>
-window.onload = function () {
-
-var chart = new CanvasJS.Chart("chartContainer", {
-	animationEnabled: true,
-	theme: "light2",
-	title:{
-		text: "Simple Line Chart"
-	},
-	axisY:{
-		includeZero: false
-	},
-	data: [{
-		type: "line",
-		dataPoints: [
-			{ y: 450 },
-			{ y: 414},
-			{ y: 520, indexLabel: "highest",markerColor: "red", markerType: "triangle" },
-			{ y: 460 },
-			{ y: 450 },
-			{ y: 500 },
-			{ y: 480 },
-			{ y: 480 },
-			{ y: 410 , indexLabel: "lowest",markerColor: "DarkSlateGrey", markerType: "cross" },
-			{ y: 500 },
-			{ y: 480 },
-			{ y: 510 }
-		]
-	}]
-});
-chart.render();
-
-}
-        </script>
-    </th:block>-->
-
-
+    <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
 </div>
+
+<!--Grafic-->
+<section layout:fragment="scripts">
+    <script th:src="@{/js/canvasjs.min.js}"></script>
+
+    <script th:inline="javascript">
+        var graphDataPoints = [[${graphDataPoints}]];
+
+        window.onload = function () {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light2",
+                title:{
+                    text: "Simple Line Chart"
+                },
+                axisY:{
+                    includeZero: false
+                },
+                data: [{
+                    type: "line",
+                    dataPoints: graphDataPoints
+                }]
+            });
+            chart.render();
+        }
+    </script>
+</section>
+
 </body>
 </html>

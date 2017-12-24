@@ -1,5 +1,6 @@
 package com.policat.LA.controllers;
 
+import com.policat.LA.dtos.DataPointDTO;
 import com.policat.LA.entities.QuestionResponse;
 import com.policat.LA.entities.QuestionTag;
 import com.policat.LA.entities.QuizResult;
@@ -49,6 +50,7 @@ public class AnalyticsController {
     public String viewDescriptive(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
+
         List<QuizResult> quizResults = quizResultRepository.findByUser(user);
         quizResults.sort(Comparator.comparing(QuizResult::getDate).reversed());
 
@@ -78,6 +80,7 @@ public class AnalyticsController {
     public String viewDiagnostic(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
+
         List<QuizResult> quizResults = quizResultRepository.findByUser(user);
 
         int maxScore = quizResults.stream().mapToInt(q -> q.getScore()).max().getAsInt();
@@ -92,15 +95,16 @@ public class AnalyticsController {
     }
 
     @RequestMapping(value = "predictive", method = RequestMethod.GET)
-    public String viewPredictive(){
+    public String viewPredictive(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
-        List<QuizResult> quizResults = user.getQuizResults();
 
-        // 1. compar Nivel User (avg(Nota Initiala,Nota Finala)) cu nota test hartie
-        //2. afisez toate notele sub mediana
-        //3. Grafic cu trendul
+        List<QuizResult> quizResults = quizResultRepository.findByUser(user);
+        quizResults.sort(Comparator.comparing(QuizResult::getDate));
 
+        List<DataPointDTO> graphDataPoints = quizResults.stream().map(q -> new DataPointDTO(q.getScore())).collect(Collectors.toList());
+
+        model.addAttribute("graphDataPoints", graphDataPoints);
         return "predictive";
     }
 
@@ -108,6 +112,7 @@ public class AnalyticsController {
     public String viewPrescriptive(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
+
         List<QuestionResponse> questionResponses = questionResponseRepository.findByUser(user);
 
         Map<QuestionTag, Integer> tagScores = questionResponses.stream().collect(Collectors.groupingBy(qr -> qr.getQuestion().getQuestionTag(), Collectors.summingInt(qr -> qr.isCorrect() ? 1 : 0)));
