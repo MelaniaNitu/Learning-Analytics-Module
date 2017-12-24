@@ -1,7 +1,10 @@
 package com.policat.LA.controllers;
 
+import com.policat.LA.entities.QuestionResponse;
+import com.policat.LA.entities.QuestionTag;
 import com.policat.LA.entities.QuizResult;
 import com.policat.LA.entities.User;
+import com.policat.LA.repositories.QuestionResponseRepository;
 import com.policat.LA.repositories.QuizResultRepository;
 import com.policat.LA.repositories.UserRepository;
 import com.policat.LA.session.AuthedUser;
@@ -14,8 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,6 +33,8 @@ public class AnalyticsController {
     UserRepository userRepository;
     @Autowired
     QuizResultRepository quizResultRepository;
+    @Autowired
+    QuestionResponseRepository questionResponseRepository;
 
 
     @ModelAttribute("users")
@@ -98,13 +105,15 @@ public class AnalyticsController {
     }
 
     @RequestMapping(value = "prescriptive", method = RequestMethod.GET)
-    public String viewPrescriptive(){
+    public String viewPrescriptive(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
-        List<QuizResult> quizResults = user.getQuizResults();
+        List<QuestionResponse> questionResponses = questionResponseRepository.findByUser(user);
 
-       //verific unde a avut cel mai mic scor(domeniu+label) => recomand tutorial in domeniu/label-ul respectiv
+        Map<QuestionTag, Integer> tagScores = questionResponses.stream().collect(Collectors.groupingBy(qr -> qr.getQuestion().getQuestionTag(), Collectors.summingInt(qr -> qr.isCorrect() ? 1 : 0)));
+        QuestionTag weakestTag = Collections.min(tagScores.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
 
+        model.addAttribute("weakestTag", weakestTag);
         return "prescriptive";
     }
 

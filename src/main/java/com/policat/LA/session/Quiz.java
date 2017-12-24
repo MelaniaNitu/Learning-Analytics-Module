@@ -3,25 +3,24 @@ package com.policat.LA.session;
 import com.policat.LA.configs.QuizConfig;
 import com.policat.LA.entities.Domain;
 import com.policat.LA.entities.Question;
+import com.policat.LA.entities.QuestionResponse;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @Scope("session")
 public class Quiz {
     private Domain domain;
     private Question currentQuestion;
-    private ArrayList<Long> currentSelectedAnswers = new ArrayList<>();
+    private List<Long> currentSelectedAnswers = new ArrayList<>();
     private Date questionTimeLimit;
     private Boolean completed = false;
-    private ArrayList<Response> responses = new ArrayList<>();
-
-    public Quiz() {
-    }
+    private List<QuestionResponse> responses = new ArrayList<>();
 
     public Domain getDomain() {
         return domain;
@@ -44,7 +43,7 @@ public class Quiz {
         this.questionTimeLimit = calendar.getTime();
     }
 
-    public ArrayList<Long> getCurrentSelectedAnswers() {
+    public List<Long> getCurrentSelectedAnswers() {
         //workaround for null when no answers are selected
         if (this.currentSelectedAnswers == null) {
             this.currentSelectedAnswers = new ArrayList<>();
@@ -72,19 +71,19 @@ public class Quiz {
         this.completed = completed;
     }
 
-    public ArrayList<Response> getResponses() {
+    public List<QuestionResponse> getResponses() {
         return responses;
     }
 
-    public void setResponses(ArrayList<Response> responses) {
+    public void setResponses(List<QuestionResponse> responses) {
         this.responses = responses;
     }
 
-    public void addResponse(Response response) {
+    public void addResponse(QuestionResponse response) {
         this.responses.add(response);
     }
 
-    public Response getMostRecentResponse() {
+    public QuestionResponse getMostRecentResponse() {
         return responses.get(responses.size() - 1);
     }
 }
