@@ -75,16 +75,15 @@
             <ul class="nav navbar-nav">
                 <li th:classappend="${#httpServletRequest.getRequestURI() == '/' || #httpServletRequest.getRequestURI() == '/index'}?'active' : ''">
                     <a th:href="@{/}">Home<span class="pull-right glyphicon glyphicon-home"></span></a></li>
-               <!-- <li th:classappend="${#httpServletRequest.getRequestURI() == '/quiz'}?'active' : ''"><a
-                        th:href="@{/quiz}">Quiz<span class="pull-right glyphicon glyphicon-ok"></span></a></li>
--->
+
                 <li sec:authorize="isAnonymous()"
                     th:classappend="${#httpServletRequest.getRequestURI() == '/login'}?'active' : ''"><a
                         th:href="@{/login}">Log-in<span class="pull-right glyphicon glyphicon-log-in"></span></a></li>
-<!--                <li sec:authorize="isAnonymous()"
+<!--            <li sec:authorize="isAnonymous()"
                     th:classappend="${#httpServletRequest.getRequestURI() == '/register'}?'active' : ''"><a
                         th:href="@{/register}">Register<span class="pull-right glyphicon glyphicon-edit"></span></a>
-                </li>-->
+                </li>
+-->
 
                 <li sec:authorize="isAuthenticated()" class="dropdown"
                     th:classappend="${#httpServletRequest.getRequestURI() == '/changePass'}?'active' : ''">
@@ -146,8 +145,6 @@
                     <ul class="dropdown-menu" role="menu">
                         <li th:classappend="${#httpServletRequest.getRequestURI() == '/about'}?'active' : ''"><a
                                 th:href="@{/about}">About</a></li>
-                      <!--  <li th:classappend="${#httpServletRequest.getRequestURI() == '/results'}?'active' : ''"><a
-                                th:href="@{/results}">Results</a></li>-->
                         <li th:classappend="${#httpServletRequest.getRequestURI() == '/contact'}?'active' : ''"><a
                                 th:href="@{/contact}">Contact</a></li>
                         <li><a href="https://github.com/MelaniaNitu/Learning-Analytics-Module" target="_blank">GitHub</a>
