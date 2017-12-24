@@ -22,8 +22,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -102,7 +104,29 @@ public class AnalyticsController {
         List<QuizResult> quizResults = quizResultRepository.findByUser(user);
         quizResults.sort(Comparator.comparing(QuizResult::getDate));
 
-        List<DataPointDTO> graphDataPoints = quizResults.stream().map(q -> new DataPointDTO(q.getScore())).collect(Collectors.toList());
+        AtomicInteger xPos = new AtomicInteger(1);
+        List<DataPointDTO> graphDataPoints = quizResults.stream().map(q -> new DataPointDTO(xPos.getAndIncrement(), q.getScore())).collect(Collectors.toList());
+        int nrScores = graphDataPoints.size();
+
+        //trendline formula: http://classroom.synonym.com/calculate-trendline-2709.html
+        //slope
+        double a = nrScores * graphDataPoints.stream().mapToDouble(dp -> dp.getX() * dp.getY()).sum();
+        double b = graphDataPoints.stream().mapToDouble(dp -> dp.getX()).sum() * graphDataPoints.stream().mapToDouble(dp -> dp.getY()).sum();
+        double c = nrScores * graphDataPoints.stream().mapToDouble(dp -> Math.pow(dp.getX(), 2)).sum();
+        double d = Math.pow(graphDataPoints.stream().mapToDouble(dp -> dp.getX()).sum(), 2);
+        double slope = (a - b) / (c - d);
+
+        //y-intercept
+        double e = graphDataPoints.stream().mapToDouble(dp -> dp.getY()).sum();
+        double f = slope * graphDataPoints.stream().mapToDouble(dp -> dp.getX()).sum();
+        double yIntercept = (e - f) / (double) nrScores;
+
+        //set dash line for the last real point (since they affect the next value)
+        graphDataPoints.get(graphDataPoints.size() - 1).setLineDashType("dash");
+
+        //predict next values using trendline
+        List<DataPointDTO> predictedDataPoints = IntStream.range(xPos.get(), xPos.get() + 3).mapToObj(x -> new DataPointDTO(x, Math.round(slope * x + yIntercept), "dash")).collect(Collectors.toList());
+        graphDataPoints.addAll(predictedDataPoints);
 
         model.addAttribute("graphDataPoints", graphDataPoints);
         return "predictive";
