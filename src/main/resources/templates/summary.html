@@ -11,15 +11,116 @@
 
 <div layout:fragment="content">
     <div class="jumbotron">
-        <h1>Profile Summary</h1>
+        <h1>User Profile Analysis Preview</h1>
     </div>
 
-    <div class="col-sm-12 text-left" th:style="'border: 2px solid green; border-radius: 5px;'">
-        <p>User Profile Analysis Preview</p>
+    <div class="col-sm-12">
+        <h3>Descriptive Analysis: What happened?</h3>
     </div>
     <br/><br/>
     <hr/>
 
+    <div class="results_list">
+        <div class="row">
+            <div class="col-sm-4" th:style="'background-color:black;color:white;'">Date</div>
+            <div class="col-sm-4" th:style="'background-color:black;color:white;'">Domain</div>
+            <div class="col-sm-4" th:style="'background-color:black;color:white;'">Score</div>
+        </div>
+        <div class="row" th:each="q : ${quizResults}">
+            <div class="col-sm-4" th:style="'background-color:lightgray;'" th:text="${q.date}">Date</div>
+            <div class="col-sm-4" th:style="'background-color:lavender;'" th:text="${q.domain.name}">Domain</div>
+            <div class="col-sm-4" th:style="'background-color:lavenderblush;'" th:text="${q.score}">Score</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4" th:style="'background-color: #98e698;'">User Level: </div>
+        <div class="col-sm-4" th:style="'background-color: #98e698;'" th:text="${userLevel}">5</div>
+        <div class="col-sm-4" th:style="'background-color: #98e698;'" th:text="${userLevelComparison}">Average</div>
+    </div>
+    <br/><br/>
+
+
+    <div class="col-sm-12" >
+        <h3>Diagnostic Analysis: Why did it happen? </h3>
+    </div>
+    <br/><br/>
+    <hr/>
+
+    <div class="row">
+        <div class="col-sm-4" th:style="'background-color: #F08080;'">Lowest score: </div>
+        <div class="col-sm-8" th:style="'background-color: #F08080;'" th:text="${minScore}">5</div>
+    </div>
+
+    <div class="results_list">
+        <div class="row" th:each="q : ${underMedian}">
+            <div class="col-sm-4" th:style="'background-color:lightgray;'" th:text="${q.date}">Date</div>
+            <div class="col-sm-4" th:style="'background-color:lavender;'" th:text="${q.domain.name}">Domain</div>
+            <div class="col-sm-4" th:style="'background-color:lavenderblush;'" th:text="${q.score}">Score</div>
+        </div>
+    </div>
+    <br/><br/>
+
+
+
+    <div class="col-sm-12" >
+        <h3>Predictive Analysis: What will happen?</h3>
+    </div>
+    <br/><br/>
+    <hr/>
+    <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+
+    <section layout:fragment="scripts">
+        <script th:src="@{/js/canvasjs.min.js}"></script>
+
+        <script th:inline="javascript">
+        var graphDataPoints = [[${graphDataPoints}]];
+
+        window.onload = function () {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light2",
+                title:{
+                    text: "Test Results and Predictions"
+                },
+                axisX: {
+                    includeZero: false,
+                    interval: 1
+                },
+                axisY: {
+                    includeZero: true
+                },
+                data: [{
+                    type: "line",
+                    dataPoints: graphDataPoints
+                }]
+            });
+            chart.render();
+        }
+    </script>
+    </section>
+    <br/><br/>
+
+
+
+    <div class="col-sm-12" >
+        <h3>Prescriptive Analysis: How can we make it happen?</h3>
+    </div>
+    <br/><br/>
+
+
+
+    <div class="row">
+        <div class="col-sm-4">Weakest tag: </div>
+        <!--<div class="col-sm-4" th:text="${weakestTag.name}">TagName</div>-->
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">Tutorial: </div>
+        <!--<div class="col-sm-4" th:text="${weakestTag.link}">Link</div>-->
+    </div>
+    <br/><br/>
+    <hr/>
 </div>
 </body>
 </html>

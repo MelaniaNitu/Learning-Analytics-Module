@@ -16,7 +16,7 @@
     <br/>
     <div class="users_list">
         <div class="row" th:each="u : ${users}">
-            <div class="col-sm-8" th:style="'background-color:lightgray;'" th:text="${u.username}">Username</div>
+            <div class="col-sm-8" th:style="'background-color:#e6ffe6;'" th:text="${u.username}">Username</div>
             <div class="col-sm-4">
                 <a class="btn btn-success" th:href="@{/analytics/summary/{id}(id=${u.id})}">View Metrics</a>
             </div>

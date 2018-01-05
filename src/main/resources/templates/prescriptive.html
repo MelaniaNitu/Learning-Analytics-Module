@@ -14,21 +14,26 @@
         <h1>Prescriptive Analytics</h1>
     </div>
 
-    <div class="col-sm-12 text-left" th:style="'border: 2px solid green; border-radius: 5px;'">
-        <p>Prescriptive analytics automatically synthesizes data to make predictions and then suggests decision
-            options to take advantage of the predictions. </p>
+    <div class="col-sm-12">
+        <h3>How can we make it happen?</h3>
+        <p>In this section, we automatically synthesize data from prediction and we suggest learning options to improve your performance and
+            to take advantage of the predictions. Let's see where you had the weakest results and what is our recommendation:</p>
     </div>
     <br/><br/>
     <hr/>
 
     <div class="row">
-        <div class="col-sm-4">Weakest tag: </div>
-        <div class="col-sm-4" th:text="${weakestTag.name}">TagName</div>
-    </div>
+        <div class="col-sm-6">
 
-    <div class="row">
-        <div class="col-sm-4">Tutorial: </div>
-        <div class="col-sm-4" th:text="${weakestTag.link}">Link</div>
+        <div class="well">Weakest tag: <div th:text="${weakestTag.name}">TagName</div></div>
+
+
+        </div>
+
+        <div class="col-sm-6">
+        <div class="well">Tutorial:  <div th:text="${weakestTag.link}">Link</div></div>
+
+        </div>
     </div>
 </div>
 </body>

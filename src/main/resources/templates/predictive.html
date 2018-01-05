@@ -14,9 +14,9 @@
         <h1>Predictive Analytics</h1>
     </div>
 
-    <div class="col-sm-12 text-left" th:style="'border: 2px solid green; border-radius: 5px;'">
-        <p>Predictive analytics turns data into valuable, actionable information. Predictive analytics uses data to
-           determine the probable future outcome of an event or a likelihood of a situation occurring. </p>
+    <div class="col-sm-12 " >
+        <p><b>What will happen?</b> Let's determine now the probable future outcome of your performance and
+        turning your results into valuable, actionable information.</p>
     </div>
     <br/><br/>
     <hr/>
@@ -30,7 +30,6 @@
 
     <script th:inline="javascript">
         var graphDataPoints = [[${graphDataPoints}]];
-
         window.onload = function () {
             var chart = new CanvasJS.Chart("chartContainer", {
                 animationEnabled: true,
