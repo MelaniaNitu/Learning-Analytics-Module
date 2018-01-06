@@ -124,7 +124,7 @@
 
     <script th:inline="javascript">
         var graphDataPoints = [[${graphDataPoints}]];
-
+        var predictedDataPoints = [[${predictedDataPoints}]];
         window.onload = function () {
             var chart = new CanvasJS.Chart("chartContainer", {
                 animationEnabled: true,
@@ -139,12 +139,37 @@
                 axisY: {
                     includeZero: true
                 },
-                data: [{
-                    type: "line",
-                    dataPoints: graphDataPoints
-                }]
+                legend: {
+                    cursor: "pointer",
+                    itemclick: toggleDataSeries
+                },
+                data: [
+                    {
+                        type: "line",
+                        showInLegend: true,
+                        name: "Existing Scores",
+                        dataPoints: graphDataPoints
+                    },
+                    {
+                        type: "line",
+                        showInLegend: true,
+                        name: "Prediction",
+                        lineDashType: "dash",
+                        dataPoints: predictedDataPoints
+                    }
+                ]
             });
             chart.render();
+
+            function toggleDataSeries(e) {
+                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                    e.dataSeries.visible = false;
+                }
+                else {
+                    e.dataSeries.visible = true;
+                }
+                chart.render();
+            }
         }
     </script>
 </section>
