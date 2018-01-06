@@ -1,26 +1,26 @@
 package com.policat.LA.dtos;
 
-public class DataPointDTO {
-    private int x;
+public class DataPointLineDTO {
+    private Integer x;
     private double y;
     private String lineDashType;
 
-    public DataPointDTO(int x, double y) {
+    public DataPointLineDTO(Integer x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public DataPointDTO(int x, double y, String lineDashType) {
+    public DataPointLineDTO(Integer x, double y, String lineDashType) {
         this.x = x;
         this.y = y;
         this.lineDashType = lineDashType;
     }
 
-    public int getX() {
+    public Integer getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(Integer x) {
         this.x = x;
     }
 

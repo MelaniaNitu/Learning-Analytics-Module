@@ -1,6 +1,7 @@
 package com.policat.LA.controllers;
 
-import com.policat.LA.dtos.DataPointDTO;
+import com.policat.LA.dtos.DataPointBarDTO;
+import com.policat.LA.dtos.DataPointLineDTO;
 import com.policat.LA.entities.QuestionResponse;
 import com.policat.LA.entities.QuestionTag;
 import com.policat.LA.entities.QuizResult;
@@ -23,10 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -48,10 +48,12 @@ public class AnalyticsController {
 
 
     @ModelAttribute("users")
-    public List<User> getUsers() {return (List<User>) userRepository.findAll();}
+    public List<User> getUsers() {
+        return (List<User>) userRepository.findAll();
+    }
 
     @ModelAttribute("user")
-    public User getUser() {
+    public User getCurrentUser() {
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
         return user;
@@ -76,14 +78,11 @@ public class AnalyticsController {
 
     @RequestMapping(value = "descriptive", method = RequestMethod.GET)
     public String viewDescriptive(Model model){
-        calcDescriptive(model);
+        calcDescriptive(model, getCurrentUser());
         return "descriptive";
     }
 
-    private void calcDescriptive(Model model){
-        AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = auth.getUser();
-
+    private void calcDescriptive(Model model, User user){
         List<QuizResult> quizResults = quizResultRepository.findByUser(user);
         quizResults.sort(Comparator.comparing(QuizResult::getDate).reversed());
 
@@ -110,18 +109,15 @@ public class AnalyticsController {
 
     @RequestMapping(value = "diagnostic", method = RequestMethod.GET)
     public String viewDiagnostic(Model model){
-       calcDiagnostic(model);
+       calcDiagnostic(model, getCurrentUser());
        return "diagnostic";
     }
 
-    private void calcDiagnostic(Model model){
-        AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = auth.getUser();
-
+    private void calcDiagnostic(Model model, User user){
         List<QuizResult> quizResults = quizResultRepository.findByUser(user);
 
-        int maxScore = quizResults.stream().mapToInt(q -> q.getScore()).max().getAsInt();
-        int minScore = quizResults.stream().mapToInt(q -> q.getScore()).min().getAsInt();
+        int maxScore = quizResults.stream().mapToInt(q -> q.getScore()).max().orElse(100);
+        int minScore = quizResults.stream().mapToInt(q -> q.getScore()).min().orElse(0);
         double median = (maxScore + minScore) / (double) 2;
 
         List<QuizResult> underMedian = quizResults.stream().filter(q -> q.getScore() < median).collect(Collectors.toList());
@@ -132,20 +128,17 @@ public class AnalyticsController {
 
     @RequestMapping(value = "predictive", method = RequestMethod.GET)
     public String viewPredictive(Model model){
-        calcPredictive(model);
+        calcPredictive(model, getCurrentUser());
         return "predictive";
     }
 
 
-    private void calcPredictive(Model model){
-        AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = auth.getUser();
-
+    private void calcPredictive(Model model, User user){
         List<QuizResult> quizResults = quizResultRepository.findByUser(user);
         quizResults.sort(Comparator.comparing(QuizResult::getDate));
 
         AtomicInteger xPos = new AtomicInteger(1);
-        List<DataPointDTO> graphDataPoints = quizResults.stream().map(q -> new DataPointDTO(xPos.getAndIncrement(), q.getScore())).collect(Collectors.toList());
+        List<DataPointLineDTO> graphDataPoints = quizResults.stream().map(q -> new DataPointLineDTO(xPos.getAndIncrement(), q.getScore())).collect(Collectors.toList());
         int nrScores = graphDataPoints.size();
 
         //trendline formula: http://classroom.synonym.com/calculate-trendline-2709.html
@@ -165,27 +158,19 @@ public class AnalyticsController {
         graphDataPoints.get(graphDataPoints.size() - 1).setLineDashType("dash");
 
         //predict next values using trendline
-        List<DataPointDTO> predictedDataPoints = IntStream.range(xPos.get(), xPos.get() + 3).mapToObj(x -> new DataPointDTO(x, Math.round(slope * x + yIntercept), "dash")).collect(Collectors.toList());
+        List<DataPointLineDTO> predictedDataPoints = IntStream.range(xPos.get(), xPos.get() + 3).mapToObj(x -> new DataPointLineDTO(x, Math.round(slope * x + yIntercept), "dash")).collect(Collectors.toList());
         graphDataPoints.addAll(predictedDataPoints);
 
         model.addAttribute("graphDataPoints", graphDataPoints);
     }
 
-
-
-    @RequestMapping(value = "learnogram", method = RequestMethod.GET)
-    public String viewLernogram(Model model){ return "learnogram";}
-
     @RequestMapping(value = "prescriptive", method = RequestMethod.GET)
     public String viewPrescriptive(Model model){
-        calcPrescriptive(model);
+        calcPrescriptive(model, getCurrentUser());
         return "prescriptive";
     }
 
-    private void calcPrescriptive(Model model){
-        AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = auth.getUser();
-
+    private void calcPrescriptive(Model model, User user){
         List<QuestionResponse> questionResponses = questionResponseRepository.findByUser(user);
 
         Map<QuestionTag, Integer> tagScores = questionResponses.stream().collect(Collectors.groupingBy(qr -> qr.getQuestion().getQuestionTag(), Collectors.summingInt(qr -> qr.isCorrect() ? 1 : 0)));
@@ -196,33 +181,62 @@ public class AnalyticsController {
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
     public String viewSummary(Model model){
-        calcDescriptive(model);
-        calcDiagnostic(model);
-        calcPredictive(model);
-        calcPrescriptive(model);
-        return "summary";
+        User currentUser = getCurrentUser();
+        return viewSummary(currentUser.getId(), model);
     }
 
     @RequestMapping(value = "summary/{id}", method = RequestMethod.GET)
-    public String viewSummary(@PathVariable Long id){
+    public String viewSummary(@PathVariable Long id, Model model){
         User user = userRepository.findOne(id);
+        calcDescriptive(model, user);
+        calcDiagnostic(model, user);
+        calcPredictive(model, user);
+        calcPrescriptive(model, user);
         return "summary";
     }
 
     @RequestMapping(value = "summary/{id}/export", method = RequestMethod.GET)
     public void exportSummary(@PathVariable Long id, Model model, HttpServletRequest request, HttpServletResponse response){
-        calcDescriptive(model);
-        calcDiagnostic(model);
-        calcPredictive(model);
-        calcPrescriptive(model);
-
         User user = userRepository.findOne(id);
+
+        calcDescriptive(model, user);
+        calcDiagnostic(model, user);
+        calcPredictive(model, user);
+        calcPrescriptive(model, user);
+
+        Date date = new Date() ;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss") ;
+
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\""+user.getUsername()+".pdf\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\""+user.getUsername()+"_"+dateFormat.format(date)+".pdf\"");
         try {
             pdfGeneratorService.createPdf("summary",model.asMap(), request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping(value = "learnogram", method = RequestMethod.GET)
+    public String viewLernogram(Model model){
+        List<DataPointBarDTO> tpDataPoints = new ArrayList<>();
+        List<DataPointBarDTO> paperDataPoints = new ArrayList<>();
+        List<DataPointBarDTO> catDataPoints = new ArrayList<>();
+
+        List<User> users = getUsers();
+        for(User user : users) {
+            BigDecimal scoreTp = user.getScoreTp();
+            BigDecimal scorePaper = user.getScorePaper();
+            tpDataPoints.add(new DataPointBarDTO(user.getUsername(), scoreTp != null ? scoreTp : new BigDecimal(0)));
+            paperDataPoints.add(new DataPointBarDTO(user.getUsername(), scorePaper != null ? scorePaper : new BigDecimal(0)));
+
+            List<QuizResult> quizResults = quizResultRepository.findByUser(user);
+            double userCatAverage = quizResults.stream().mapToInt(q -> q.getScore()).average().orElse(0);
+            catDataPoints.add(new DataPointBarDTO(user.getUsername(), new BigDecimal(userCatAverage).divide(new BigDecimal(10))));
+        }
+
+        model.addAttribute("tpDataPoints", tpDataPoints);
+        model.addAttribute("paperDataPoints", paperDataPoints);
+        model.addAttribute("catDataPoints", catDataPoints);
+        return "learnogram";
     }
 }

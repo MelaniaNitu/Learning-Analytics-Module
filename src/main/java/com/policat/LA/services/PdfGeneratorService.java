@@ -9,9 +9,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 
 @Service

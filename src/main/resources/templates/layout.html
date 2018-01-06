@@ -130,8 +130,8 @@
                 </li>
 
                 <li sec:authorize="isAuthenticated()"
-                        th:classappend="${#httpServletRequest.getRequestURI() == '/learnogram'}?'active' : ''"><a
-                           th:href="@{/learnogram}">Learnogram<span class="pull-right glyphicon glyphicon-picture"></span></a></li>
+                        th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/learnogram'}?'active' : ''"><a
+                           th:href="@{/analytics/learnogram}">Learnogram<span class="pull-right glyphicon glyphicon-picture"></span></a></li>
 
                 <li sec:authorize="isAuthenticated()"
                     th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/summary'}?'active' : ''"><a
