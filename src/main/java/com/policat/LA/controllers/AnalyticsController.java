@@ -6,6 +6,7 @@ import com.policat.LA.entities.QuestionResponse;
 import com.policat.LA.entities.QuestionTag;
 import com.policat.LA.entities.QuizResult;
 import com.policat.LA.entities.User;
+import com.policat.LA.enums.Role;
 import com.policat.LA.repositories.QuestionResponseRepository;
 import com.policat.LA.repositories.QuizResultRepository;
 import com.policat.LA.repositories.UserRepository;
@@ -232,14 +233,16 @@ public class AnalyticsController {
 
         List<User> users = getUsers();
         for(User user : users) {
-            BigDecimal scoreTp = user.getScoreTp();
-            BigDecimal scorePaper = user.getScorePaper();
-            tpDataPoints.add(new DataPointBarDTO(user.getUsername(), scoreTp != null ? scoreTp : new BigDecimal(0)));
-            paperDataPoints.add(new DataPointBarDTO(user.getUsername(), scorePaper != null ? scorePaper : new BigDecimal(0)));
+            if(user.getId() == getCurrentUser().getId() || getCurrentUser().getRole() == Role.ADMIN) {
+                BigDecimal scoreTp = user.getScoreTp();
+                BigDecimal scorePaper = user.getScorePaper();
+                tpDataPoints.add(new DataPointBarDTO(user.getUsername(), scoreTp != null ? scoreTp : new BigDecimal(0)));
+                paperDataPoints.add(new DataPointBarDTO(user.getUsername(), scorePaper != null ? scorePaper : new BigDecimal(0)));
 
-            List<QuizResult> quizResults = quizResultRepository.findByUser(user);
-            double userCatAverage = quizResults.stream().mapToInt(q -> q.getScore()).average().orElse(0);
-            catDataPoints.add(new DataPointBarDTO(user.getUsername(), new BigDecimal(userCatAverage).divide(new BigDecimal(10))));
+                List<QuizResult> quizResults = quizResultRepository.findByUser(user);
+                double userCatAverage = quizResults.stream().mapToInt(q -> q.getScore()).average().orElse(0);
+                catDataPoints.add(new DataPointBarDTO(user.getUsername(), new BigDecimal(userCatAverage).divide(new BigDecimal(10))));
+            }
         }
 
         model.addAttribute("tpDataPoints", tpDataPoints);
