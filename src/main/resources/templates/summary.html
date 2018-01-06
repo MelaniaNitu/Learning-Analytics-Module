@@ -102,25 +102,45 @@
     <br/><br/>
 
 
-
     <div class="col-sm-12" >
         <h3>Prescriptive Analysis: How can we make it happen?</h3>
     </div>
     <br/><br/>
 
-
-
     <div class="row">
-        <div class="col-sm-4">Weakest tag: </div>
-        <!--<div class="col-sm-4" th:text="${weakestTag.name}">TagName</div>-->
+        <div class="col-sm-6">
+            <div class="well">Weakest tag: <div th:text="${weakestTag.name}">TagName</div></div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="well">Tutorial:  <div th:text="${weakestTag.link}">Link</div></div>
+        </div>
     </div>
+    <br/><br/>
 
-    <div class="row">
-        <div class="col-sm-4">Tutorial: </div>
-        <!--<div class="col-sm-4" th:text="${weakestTag.link}">Link</div>-->
+
+    <div class="col-sm-12" >
+        <h3> Learnogram </h3>
     </div>
     <br/><br/>
     <hr/>
+
+    <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+
+    <section layout:fragment="scripts">
+        <script th:src="@{/js/canvasjs.min.js}"></script>
+
+        <script th:inline="javascript">
+
+          <!--grafic  -->
+
+
+        </script>
+
+    </section>
+
+
+
 </div>
 </body>
 </html>

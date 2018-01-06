@@ -16,10 +16,22 @@
     <br/>
     <div class="users_list">
         <div class="row" th:each="u : ${users}">
-            <div class="col-sm-8" th:style="'background-color:#e6ffe6;'" th:text="${u.username}">Username</div>
-            <div class="col-sm-4">
-                <a class="btn btn-success" th:href="@{/analytics/summary/{id}(id=${u.id})}">View Metrics</a>
+            <div class="col-sm-4" th:style="'background-color:#e6ffe6;'" th:text="${u.username}">Username</div>
+
+            <div class="col-sm-8">
+                <form class="form-inline" method="post" th:action="@{/analytics/users}">
+                    <input type="hidden" name="id" th:value="${u.id}"/>
+                    <input type="number" min="0" max="10" step="0.01" class="form-control" title="Score Tp" name="scoreTp" th:value="${u.scoreTp}"/>
+                    <input type="number" min="0" max="10" step="0.01" class="form-control" title="Score Paper" name="scorePaper" th:value="${u.scorePaper}"/>
+                    <button type="submit" class="btn btn-warning">Save</button>
+                    <a class="btn btn-success" th:href="@{/analytics/summary/{id}(id=${u.id})}">View Metrics</a>
+
+                </form>
+
+
             </div>
+
+
         </div>
     </div>
 </div>

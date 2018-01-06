@@ -13,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -48,8 +50,25 @@ public class AnalyticsController {
         return "users";
     }
 
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public String saveScore(@Valid User userScore, BindingResult bindingResult) {
+        if (!bindingResult.hasErrors()) {
+            User dbUser = userRepository.findOne(userScore.getId());
+            dbUser.setScoreTp(userScore.getScoreTp());
+            dbUser.setScorePaper(userScore.getScorePaper());
+            userRepository.save(dbUser);
+        }
+        return "users";
+    }
+
     @RequestMapping(value = "descriptive", method = RequestMethod.GET)
     public String viewDescriptive(Model model){
+        calcDescriptive(model);
+        return "descriptive";
+    }
+
+    private void calcDescriptive(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
 
@@ -75,11 +94,15 @@ public class AnalyticsController {
         model.addAttribute("quizResults", quizResults);
         model.addAttribute("userLevel", average);
         model.addAttribute("userLevelComparison", userLevelComparison);
-        return "descriptive";
     }
 
     @RequestMapping(value = "diagnostic", method = RequestMethod.GET)
     public String viewDiagnostic(Model model){
+       calcDiagnostic(model);
+       return "diagnostic";
+    }
+
+    private void calcDiagnostic(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
 
@@ -93,11 +116,16 @@ public class AnalyticsController {
 
         model.addAttribute("minScore", minScore);
         model.addAttribute("underMedian", underMedian);
-        return "diagnostic";
     }
 
     @RequestMapping(value = "predictive", method = RequestMethod.GET)
     public String viewPredictive(Model model){
+        calcPredictive(model);
+        return "predictive";
+    }
+
+
+    private void calcPredictive(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
 
@@ -129,11 +157,20 @@ public class AnalyticsController {
         graphDataPoints.addAll(predictedDataPoints);
 
         model.addAttribute("graphDataPoints", graphDataPoints);
-        return "predictive";
     }
+
+
+
+    @RequestMapping(value = "learnogram", method = RequestMethod.GET)
+    public String viewLernogram(Model model){ return "learnogram";}
 
     @RequestMapping(value = "prescriptive", method = RequestMethod.GET)
     public String viewPrescriptive(Model model){
+        calcPrescriptive(model);
+        return "prescriptive";
+    }
+
+    private void calcPrescriptive(Model model){
         AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = auth.getUser();
 
@@ -143,13 +180,14 @@ public class AnalyticsController {
         QuestionTag weakestTag = Collections.min(tagScores.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
 
         model.addAttribute("weakestTag", weakestTag);
-        return "prescriptive";
     }
 
     @RequestMapping(value = "summary", method = RequestMethod.GET)
-    public String viewSummary(){
-        AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = auth.getUser();
+    public String viewSummary(Model model){
+        calcDescriptive(model);
+        calcDiagnostic(model);
+        calcPredictive(model);
+        calcPrescriptive(model);
         return "summary";
     }
 
