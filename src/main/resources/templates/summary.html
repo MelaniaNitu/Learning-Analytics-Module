@@ -14,13 +14,17 @@
         <h1>User Profile Analysis Preview</h1>
     </div>
 
-    <div class="col-sm-12">
-        <h3>Descriptive Analysis: What happened?</h3>
+    <div class="row">
+        <div class="col-sm-8">
+            <h3>Descriptive Analysis: What happened?</h3>
+        </div>
+        <div class="col-sm-4">
+            <a class="btn btn-success pull-right" th:href="@{/analytics/summary/{id}/export(id=${user.id})}">Export Summary</a>
+        </div>
     </div>
-    <br/><br/>
     <hr/>
 
-    <div class="results_list">
+    <!--<div class="results_list">
         <div class="row">
             <div class="col-sm-4" th:style="'background-color:black;color:white;'">Date</div>
             <div class="col-sm-4" th:style="'background-color:black;color:white;'">Domain</div>
@@ -31,7 +35,23 @@
             <div class="col-sm-4" th:style="'background-color:lavender;'" th:text="${q.domain.name}">Domain</div>
             <div class="col-sm-4" th:style="'background-color:lavenderblush;'" th:text="${q.score}">Score</div>
         </div>
-    </div>
+    </div>-->
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Domain</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="q : ${quizResults}">
+                <td th:text="${q.date}"></td>
+                <td th:text="${q.domain.name}"></td>
+                <td th:text="${q.score}"></td>
+            </tr>
+        </tbody>
+    </table>
 
     <div class="row">
         <div class="col-sm-4" th:style="'background-color: #98e698;'">User Level: </div>

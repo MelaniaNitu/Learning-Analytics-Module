@@ -36,6 +36,7 @@ dependencies {
 	compile('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect')
 	compile('org.thymeleaf.extras:thymeleaf-extras-springsecurity4')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.xhtmlrenderer:flying-saucer-pdf:9.1.11')
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
     testRuntime('com.h2database:h2')

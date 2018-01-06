@@ -8,6 +8,7 @@ import com.policat.LA.entities.User;
 import com.policat.LA.repositories.QuestionResponseRepository;
 import com.policat.LA.repositories.QuizResultRepository;
 import com.policat.LA.repositories.UserRepository;
+import com.policat.LA.services.PdfGeneratorService;
 import com.policat.LA.session.AuthedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -40,10 +43,19 @@ public class AnalyticsController {
     QuizResultRepository quizResultRepository;
     @Autowired
     QuestionResponseRepository questionResponseRepository;
+    @Autowired
+    PdfGeneratorService pdfGeneratorService;
 
 
     @ModelAttribute("users")
     public List<User> getUsers() {return (List<User>) userRepository.findAll();}
+
+    @ModelAttribute("user")
+    public User getUser() {
+        AuthedUser auth = (AuthedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = auth.getUser();
+        return user;
+    }
 
     @RequestMapping(value = "users", method = RequestMethod.GET)
     public String viewUsers(){
@@ -195,5 +207,22 @@ public class AnalyticsController {
     public String viewSummary(@PathVariable Long id){
         User user = userRepository.findOne(id);
         return "summary";
+    }
+
+    @RequestMapping(value = "summary/{id}/export", method = RequestMethod.GET)
+    public void exportSummary(@PathVariable Long id, Model model, HttpServletRequest request, HttpServletResponse response){
+        calcDescriptive(model);
+        calcDiagnostic(model);
+        calcPredictive(model);
+        calcPrescriptive(model);
+
+        User user = userRepository.findOne(id);
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=\""+user.getUsername()+".pdf\"");
+        try {
+            pdfGeneratorService.createPdf("summary",model.asMap(), request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
