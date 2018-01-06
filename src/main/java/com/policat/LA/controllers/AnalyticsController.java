@@ -158,10 +158,11 @@ public class AnalyticsController {
         graphDataPoints.get(graphDataPoints.size() - 1).setLineDashType("dash");
 
         //predict next values using trendline
-        List<DataPointLineDTO> predictedDataPoints = IntStream.range(xPos.get(), xPos.get() + 3).mapToObj(x -> new DataPointLineDTO(x, Math.round(slope * x + yIntercept), "dash")).collect(Collectors.toList());
-        graphDataPoints.addAll(predictedDataPoints);
+        List<DataPointLineDTO> predictedDataPoints = IntStream.range(1, xPos.get() + 3).mapToObj(x -> new DataPointLineDTO(x, Math.round(slope * x + yIntercept), "dash")).collect(Collectors.toList());
+        //graphDataPoints.addAll(predictedDataPoints);
 
         model.addAttribute("graphDataPoints", graphDataPoints);
+        model.addAttribute("predictedDataPoints", predictedDataPoints);
     }
 
     @RequestMapping(value = "prescriptive", method = RequestMethod.GET)

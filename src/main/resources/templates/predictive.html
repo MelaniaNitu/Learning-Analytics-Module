@@ -37,6 +37,7 @@
 
     <script th:inline="javascript">
         var graphDataPoints = [[${graphDataPoints}]];
+        var predictedDataPoints = [[${predictedDataPoints}]];
         window.onload = function () {
             var chart = new CanvasJS.Chart("chartContainer", {
                 animationEnabled: true,
@@ -51,10 +52,17 @@
                 axisY: {
                     includeZero: true
                 },
-                data: [{
-                    type: "line",
-                    dataPoints: graphDataPoints
-                }]
+                data: [
+                    {
+                        type: "line",
+                        dataPoints: graphDataPoints
+                    },
+                    {
+                        type: "line",
+                        lineDashType: "dash",
+                        dataPoints: predictedDataPoints
+                    }
+                ]
             });
             chart.render();
         }
