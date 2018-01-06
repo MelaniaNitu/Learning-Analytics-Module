@@ -131,7 +131,12 @@
 
                 <li sec:authorize="isAuthenticated()"
                         th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/summary'}?'active' : ''"><a
+                        th:href="@{/analytics/summay}">Learnogram<span class="pull-right glyphicon glyphicon-picture"></span></a></li>
+
+                <li sec:authorize="isAuthenticated()"
+                    th:classappend="${#httpServletRequest.getRequestURI() == '/analytics/summary'}?'active' : ''"><a
                         th:href="@{/analytics/summary}">Profile Summary<span class="pull-right glyphicon glyphicon-check"></span></a></li>
+
 
                 <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdxQbPbKAWt4aw9wgTgZ0Wq_aY0FCPDdVCVdA-tgvjYT6NCMA/viewform?usp=sf_link"
                        target="_blank">Feedback<span class="pull-right glyphicon glyphicon-pencil"></span></a></li>
