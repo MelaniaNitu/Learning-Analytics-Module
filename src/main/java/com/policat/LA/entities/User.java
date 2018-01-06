@@ -3,6 +3,7 @@ package com.policat.LA.entities;
 import com.policat.LA.enums.Role;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,12 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
+
+    @Column
+    private BigDecimal scoreTp;
+
+    @Column
+    private BigDecimal scorePaper;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuizResult> quizResults = new ArrayList<>();
@@ -51,6 +58,22 @@ public class User {
 
     public void setRole(Role role) {
         role = role;
+    }
+
+    public BigDecimal getScoreTp() {
+        return scoreTp;
+    }
+
+    public void setScoreTp(BigDecimal scoreTp) {
+        this.scoreTp = scoreTp;
+    }
+
+    public BigDecimal getScorePaper() {
+        return scorePaper;
+    }
+
+    public void setScorePaper(BigDecimal scorePaper) {
+        this.scorePaper = scorePaper;
     }
 
     public List<QuizResult> getQuizResults() {
