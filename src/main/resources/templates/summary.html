@@ -24,7 +24,7 @@
     </div>
     <hr/>
 
-    <table border="1" width="1000px">
+    <table class="col-sm-12" border="1">
         <thead>
             <tr>
                 <th th:style="'background-color:black;color:white;'">Date</th>
@@ -43,10 +43,10 @@
 
 
     <div >
-        <span th:style="'background-color: #98e698;'">User Level: </span>
-        <span th:style="'background-color: #98e698;'" th:text="${userLevel}">5</span>
-        <span th:style="'background-color: #98e698;'" th:text="${userLevelComparison}">Average</span>
-    </div>
+    <span th:style="'background-color: #98e698;'">User Level: </span>
+    <span th:style="'background-color: #98e698;'" th:text="${userLevel}">5 </span>
+    <span th:style="'background-color: #98e698;'" th:text="${userLevelComparison}">Average</span>
+</div>
     <br/><br/>
 
 
@@ -56,18 +56,33 @@
     <br/><br/>
     <hr/>
 
-    <div class="row">
-        <div class="col-sm-4" th:style="'background-color: #F08080;'">Lowest score: </div>
-        <div class="col-sm-8" th:style="'background-color: #F08080;'" th:text="${minScore}">5</div>
+
+    <div >
+        <span th:style="'background-color: #F08080;'">Lowest Score: </span>
+        <span th:style="'background-color: #F08080;'" th:text="${minScore}">5</span>
     </div>
 
-    <div class="results_list">
-        <div class="row" th:each="q : ${underMedian}">
-            <div class="col-sm-4" th:style="'background-color:lightgray;'" th:text="${q.date}">Date</div>
-            <div class="col-sm-4" th:style="'background-color:lavender;'" th:text="${q.domain.name}">Domain</div>
-            <div class="col-sm-4" th:style="'background-color:lavenderblush;'" th:text="${q.score}">Score</div>
-        </div>
-    </div>
+
+    <table border="1" class="col-sm-12">
+        <thead>
+        <tr>
+            <th th:style="'background-color:black;color:white;'">Date</th>
+            <th th:style="'background-color:black;color:white;'">Domain</th>
+            <th th:style="'background-color:black;color:white;'">Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="q : ${underMedian}">
+            <td th:style="'background-color:lightgray;'" th:text="${q.date}"></td>
+            <td th:style="'background-color:lavender;'" th:text="${q.domain.name}"></td>
+            <td th:style="'background-color:lavenderblush;'" th:text="${q.score}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+
     <br/><br/>
 
 
@@ -115,6 +130,7 @@
         <h3>Prescriptive Analysis: How can we make it happen?</h3>
     </div>
     <br/><br/>
+    <hr/>
 
     <div class="row">
         <div class="col-sm-6">

@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -75,6 +75,13 @@ public class AnalyticsController {
         }
         return "users";
     }
+
+    @RequestMapping(value = "/users/{id}/delete", method = RequestMethod.GET)
+    public String deleteUser(@PathVariable Long id) {
+        userRepository.delete(id);
+        return "redirect:/analytics/users";
+    }
+
 
     @RequestMapping(value = "descriptive", method = RequestMethod.GET)
     public String viewDescriptive(Model model){
