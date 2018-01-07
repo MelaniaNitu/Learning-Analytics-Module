@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -94,11 +96,11 @@ public class AnalyticsController {
         List<QuizResult> quizResults = quizResultRepository.findByUser(user);
         quizResults.sort(Comparator.comparing(QuizResult::getDate).reversed());
 
-        double average = quizResults.stream().mapToInt(q -> q.getScore()).average().getAsDouble();
+        double average = quizResults.stream().mapToInt(q -> q.getScore()).average().orElse(0);
 
         Supplier<Stream<QuizResult>> globalQuizResultStream = () -> StreamSupport.stream(quizResultRepository.findAll().spliterator(), false);
-        int globalMax = globalQuizResultStream.get().mapToInt(q -> q.getScore()).max().getAsInt();
-        int globalMin = globalQuizResultStream.get().mapToInt(q -> q.getScore()).min().getAsInt();
+        int globalMax = globalQuizResultStream.get().mapToInt(q -> q.getScore()).max().orElse(0);
+        int globalMin = globalQuizResultStream.get().mapToInt(q -> q.getScore()).min().orElse(0);
         double globalMedian = (globalMax + globalMin) / (double) 2;
 
         String userLevelComparison;
@@ -124,7 +126,7 @@ public class AnalyticsController {
     private void calcDiagnostic(Model model, User user){
         List<QuizResult> quizResults = quizResultRepository.findByUser(user);
 
-        int maxScore = quizResults.stream().mapToInt(q -> q.getScore()).max().orElse(100);
+        int maxScore = quizResults.stream().mapToInt(q -> q.getScore()).max().orElse(0);
         int minScore = quizResults.stream().mapToInt(q -> q.getScore()).min().orElse(0);
         double median = (maxScore + minScore) / (double) 2;
 
@@ -162,12 +164,8 @@ public class AnalyticsController {
         double f = slope * graphDataPoints.stream().mapToDouble(dp -> dp.getX()).sum();
         double yIntercept = (e - f) / (double) nrScores;
 
-        //set dash line for the last real point (since they affect the next value)
-        graphDataPoints.get(graphDataPoints.size() - 1).setLineDashType("dash");
-
-        //predict next values using trendline
-        List<DataPointLineDTO> predictedDataPoints = IntStream.range(1, xPos.get() + 3).mapToObj(x -> new DataPointLineDTO(x, Math.round(slope * x + yIntercept), "dash")).collect(Collectors.toList());
-        //graphDataPoints.addAll(predictedDataPoints);
+        //predict values using trendline
+        List<DataPointLineDTO> predictedDataPoints = IntStream.range(1, xPos.get() + 3).mapToObj(x -> new DataPointLineDTO(x, Math.round(slope * x + yIntercept))).collect(Collectors.toList());
 
         model.addAttribute("graphDataPoints", graphDataPoints);
         model.addAttribute("predictedDataPoints", predictedDataPoints);
@@ -182,8 +180,14 @@ public class AnalyticsController {
     private void calcPrescriptive(Model model, User user){
         List<QuestionResponse> questionResponses = questionResponseRepository.findByUser(user);
 
-        Map<QuestionTag, Integer> tagScores = questionResponses.stream().collect(Collectors.groupingBy(qr -> qr.getQuestion().getQuestionTag(), Collectors.summingInt(qr -> qr.isCorrect() ? 1 : 0)));
-        QuestionTag weakestTag = Collections.min(tagScores.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+        QuestionTag weakestTag;
+        if(questionResponses.size() > 0) {
+            Map<QuestionTag, Integer> tagScores = questionResponses.stream().collect(Collectors.groupingBy(qr -> qr.getQuestion().getQuestionTag(), Collectors.summingInt(qr -> qr.isCorrect() ? 1 : 0)));
+            weakestTag = Collections.min(tagScores.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+        } else {
+            weakestTag = new QuestionTag();
+            weakestTag.setName("(none)");
+        }
 
         model.addAttribute("weakestTag", weakestTag);
     }
