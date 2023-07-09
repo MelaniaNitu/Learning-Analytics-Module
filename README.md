@@ -1,6 +1,5 @@
 # Learning-Analytics-Module
 
-<<< Work in progress !!! >>>
 
 This is a <b>Learning Analytics Tool </b> for the measurement, collection, analysis and reporting of data about learners and their contexts, for purposes of understanding and optimizing learning and the environments in which it occurs.
 
